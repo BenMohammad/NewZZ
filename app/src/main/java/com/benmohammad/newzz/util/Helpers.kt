@@ -4,12 +4,41 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.view.View
+import android.widget.CalendarView
 import android.widget.TextView
 import retrofit2.Response
+import java.time.Month
+import java.util.*
 
 
 val LOGO_URL = "https://logo.clearbit.com/"
 
+fun getDateTime(timeInMilli: Long): String {
+    val currTimeInMilli = System.currentTimeMillis() / 1000
+    val diff = currTimeInMilli - timeInMilli
+    val hoursPast = diff / (60 * 60)
+    if (hoursPast < 24) {
+        return if (hoursPast == 0L) {
+            val minPast = diff / 60
+            "$minPast min"
+        } else {
+            "$hoursPast h"
+        }
+    }
+
+    val cal = Calendar.getInstance().apply {
+        timeInMillis = timeInMilli * 1000
+    }
+
+    return with(cal) {
+        val day = get(Calendar.DAY_OF_MONTH) + 1
+        val mm = get(Calendar.MONTH)
+        val year = get(Calendar.YEAR)
+        "$day-$mm-$year"
+
+    }
+}
 fun <T>getSafeResponse(response: Response<List<T>>): List<T> {
     return if(response.isSuccessful) {
         response.body() ?: emptyList()
@@ -31,4 +60,8 @@ fun isConnected(context: Context): Boolean {
 
 fun TextView.setTopDrawable(drawable: Drawable) {
     setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
+}
+
+fun View.invert() {
+    this.animate().setDuration(300).rotationBy(180f).start()
 }
