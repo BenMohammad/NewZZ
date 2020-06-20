@@ -47,6 +47,14 @@ class CommentsAdapter(
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        val item = comments[position]
+        return if (item == null)
+            VIEW_LOAD
+        else
+            VIEW_COMMENT
+    }
+
     override fun getItemCount(): Int = comments.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
