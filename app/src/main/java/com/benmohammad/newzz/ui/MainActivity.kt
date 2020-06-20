@@ -1,7 +1,8 @@
-package com.benmohammad.newzz
+package com.benmohammad.newzz.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.benmohammad.newzz.R
 
 class MainActivity : AppCompatActivity() {
 
