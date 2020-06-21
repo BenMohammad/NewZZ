@@ -49,7 +49,7 @@ class NewsDetailsViewModel(
         itemsRepository.deleteStory(item)
     }
 
-    fun getItemIdAsync(id: Long) = viewModelScope.launch {
+    fun getItemIdAsync(id: Long) = viewModelScope.async {
         itemsRepository.getItemId(id)
     }
 

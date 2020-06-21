@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class CommentsAdapter(
-    private val comments: List<CommentItem>,
+    private val comments: List<CommentItem?>,
     private val childCommentListener: ChildCommentListener,
     private val depth: Int = 0
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(), CoroutineScope {

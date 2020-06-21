@@ -1,5 +1,6 @@
 package com.benmohammad.newzz.util
 
+import android.animation.Animator
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
@@ -7,6 +8,7 @@ import android.net.ConnectivityManager
 import android.view.View
 import android.widget.CalendarView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import retrofit2.Response
 import java.time.Month
 import java.util.*
@@ -64,4 +66,28 @@ fun TextView.setTopDrawable(drawable: Drawable) {
 
 fun View.invert() {
     this.animate().setDuration(300).rotationBy(180f).start()
+}
+
+fun View.translate(value: Float, toShow: Boolean) {
+    this.animate()
+        .setDuration(300)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationEnd(animation: Animator?) {
+                this@translate.isVisible = toShow
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+
+            }
+        })
+        .translationYBy(value)
+        .start()
 }
