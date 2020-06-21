@@ -2,6 +2,7 @@ package com.benmohammad.newzz.util
 
 import android.animation.Animator
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -90,4 +91,13 @@ fun View.translate(value: Float, toShow: Boolean) {
         })
         .translationYBy(value)
         .start()
+}
+
+fun Context.isFirstRun(): Boolean {
+    val sharedPrefs = getSharedPrefs()
+    return sharedPrefs.getBoolean("First", true)
+}
+
+fun Context.getSharedPrefs():SharedPreferences{
+    return getSharedPreferences("hackerNews", Context.MODE_PRIVATE)
 }
