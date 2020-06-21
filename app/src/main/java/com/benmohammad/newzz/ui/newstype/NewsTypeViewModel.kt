@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.benmohammad.newzz.data.ItemsRepository
 import com.benmohammad.newzz.data.database.ItemDatabase
 import com.benmohammad.newzz.data.model.Item
