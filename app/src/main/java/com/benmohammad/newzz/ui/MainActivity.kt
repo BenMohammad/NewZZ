@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     fragTag = "New"
                     toolbarTitle = "New"
                     setToolBar(toolbarTitle)
-                    setFragmentMenuItem(it, NewsTypeFragment.newInstance("Mew"), "New")
+                    setFragmentMenuItem(it, NewsTypeFragment.newInstance("New"), "New")
                 }
                 R.id.action_top -> {
                     fragTag = "Top"
