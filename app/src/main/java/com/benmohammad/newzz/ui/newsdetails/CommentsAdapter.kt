@@ -105,6 +105,7 @@ class CommentsAdapter(
                 val kids = commentItem.item.kids
                 if(kids != null && kids.isNotEmpty()) {
                     tvChildren.text = "${kids.size} ${if (kids.size == 1) "comment" else "comments"}"
+
                     if(commentItem.isExpanded) {
                         ivExpand.invert()
                         childCommentListener.onExpand(commentItem, rvChildren, commentLoader, depth + 1)
@@ -120,7 +121,7 @@ class CommentsAdapter(
                             ivExpand.invert()
                             childCommentListener.onExpand(commentItem, rvChildren, commentLoader, depth + 1)
                         }
-                        commentItem.isExpanded = false
+                        commentItem.isExpanded = !commentItem.isExpanded
                     }
                 } else {
                     tvChildren.isVisible = false

@@ -78,9 +78,10 @@ class NewsItemAdapter(
                         Intent(
                             context,
                             NewsDetailActivity::class.java).apply {
-                            putExtra("LogUrl", "$LOGO_URL${item.domain}")
+                            putExtra("LogoUrl", "$LOGO_URL${item.domain}")
                             putExtra("url", item.url)
                             putExtra("author", item.by)
+                            putExtra("itemObj", item)
                         },
                         options.toBundle()
                     )

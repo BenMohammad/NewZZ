@@ -41,7 +41,7 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
     private var isSaved: Boolean = false
 
     private val commentsList = mutableListOf<CommentItem?>()
-    private lateinit var commentAdapter: CommentsAdapter
+    private lateinit var commentsAdapter: CommentsAdapter
 
     private val newsDetailsViewModel by lazy {
         ViewModelProviders.of(this).get(NewsDetailsViewModel::class.java)
@@ -120,10 +120,10 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
             val list = newsDetailsViewModel.getCommentsAsync(isRefresh).await()
             commentsLoadContainer.isVisible = false
             commentsList.addAll(list)
-            commentAdapter = CommentsAdapter(commentsList, childCommentListener)
+            commentsAdapter = CommentsAdapter(commentsList, childCommentListener)
             rvComments.apply{
                 isVisible = true
-                adapter = commentAdapter
+                adapter = commentsAdapter
                 layoutManager = LinearLayoutManager(
                     this@NewsDetailActivity,
                     RecyclerView.VERTICAL, false
@@ -172,7 +172,7 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
                     clear()
                     addAll(moreComments)
                 }
-                commentAdapter.notifyDataSetChanged()
+                commentsAdapter.notifyDataSetChanged()
                 newsDetailsViewModel.isLoading.value = false
             } catch (u: UnknownHostException) {
                 showMessageView("You are offline")
@@ -192,10 +192,10 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
     private fun addDummyLoadItem(toAdd: Boolean) {
         if(toAdd) {
             commentsList.add(null)
-            commentAdapter.notifyItemInserted(commentsList.size - 1)
+            commentsAdapter.notifyItemInserted(commentsList.size - 1)
         } else {
             commentsList.removeAt(commentsList.size - 1)
-            commentAdapter.notifyItemInserted(commentsList.size - 1)
+            commentsAdapter.notifyItemInserted(commentsList.size - 1)
         }
     }
 

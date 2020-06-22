@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     private fun setFragment(bundle: Bundle?) {
         if(bundle != null) {
-            fragTag = bundle["FRAG_TAG" ] as String
+            fragTag = bundle["FRAG_TAG"] as String
             toolbarTitle = bundle["TOOL_TITLE"] as String
             setToolBar(toolbarTitle)
             val frag = supportFragmentManager.getFragment(bundle, fragTag) as Fragment

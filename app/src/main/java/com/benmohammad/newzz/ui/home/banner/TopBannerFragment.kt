@@ -49,7 +49,7 @@ class TopBannerFragment: Fragment() {
         view.setOnClickListener {
             val options = ActivityOptions.makeSceneTransitionAnimation(
                 requireActivity(),
-                ivLogoBanner, "LogoTransition"
+                ivLogoBanner, "logoTransition"
             )
             requireContext().startActivity(
                 Intent(context, NewsDetailActivity::class.java).apply {
