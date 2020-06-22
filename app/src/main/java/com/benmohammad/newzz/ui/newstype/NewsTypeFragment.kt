@@ -132,7 +132,7 @@ class NewsTypeFragment: Fragment(), CoroutineScope {
 
     private fun retryAction() {
         if(isConnected(requireContext())) {
-            val newsType = arguments?.getBinder(NEWSTYPE) as String
+            val newsType = arguments?.get(NEWSTYPE) as String
             loadStories(newsType, true)
         } else {
             launch {

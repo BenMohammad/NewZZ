@@ -15,5 +15,5 @@ class BannerAdapter(fm: FragmentManager, private val items: List<Item>): Fragmen
         return bannerItems[position % bannerItems.size]
     }
 
-    override fun getCount(): Int = Int.MAX_VALUE
+    override fun getCount() = Int.MAX_VALUE
 }

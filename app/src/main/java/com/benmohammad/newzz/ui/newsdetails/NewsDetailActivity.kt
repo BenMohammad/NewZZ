@@ -27,7 +27,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_news_details.*
 import kotlinx.android.synthetic.main.layout_comment.*
 import kotlinx.android.synthetic.main.layout_comment_load.view.*
-import kotlinx.android.synthetic.main.layout_small_item.*
 import kotlinx.coroutines.*
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -76,7 +75,7 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_details)
 
-        retrySnack = Snackbar.make(root, "You are offline", Snackbar.LENGTH_SHORT).setAction("Retry") { loadComments(true)}
+        retrySnack = Snackbar.make(root, "You are offline", Snackbar.LENGTH_INDEFINITE).setAction("Retry") { loadComments(true)}
 
         setCollapsingToolbarLayout()
 
@@ -247,7 +246,7 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
     }
 
     private fun setCollapsingToolbarLayout() {
-        val logoUrl = intent.getStringExtra("LogUrl")
+        val logoUrl = intent.getStringExtra("LogoUrl")
 
         val item = getStoryItem()
         Picasso.get().load(logoUrl).placeholder(R.drawable.bn).into(ivLogoDetails)
@@ -274,8 +273,8 @@ class NewsDetailActivity: AppCompatActivity(), CoroutineScope {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
             android.R.id.home -> onBackPressed()
             R.id.action_save -> {
                 isSaved = !isSaved

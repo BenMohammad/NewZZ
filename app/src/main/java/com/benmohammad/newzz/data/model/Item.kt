@@ -9,8 +9,8 @@ data class Item(
     val by: String,
     @PrimaryKey
     val id: Long,
-    val kids: ArrayList<Long>,
-    val parts: ArrayList<Long>,
+    val kids: ArrayList<Long>?,
+    val parts: ArrayList<Long>?,
     val parent: Long,
     val descendants: Int,
     val score: Int,

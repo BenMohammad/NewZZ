@@ -7,17 +7,19 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.fragment.app.Fragment
+import androidx.work.*
 import com.benmohammad.newzz.R
+import com.benmohammad.newzz.topnewsalert.TopNewsFetchWorker
 import com.benmohammad.newzz.ui.home.HomeFragment
 import com.benmohammad.newzz.ui.newstype.NewsTypeFragment
 import com.benmohammad.newzz.util.getSharedPrefs
 import com.benmohammad.newzz.util.isFirstRun
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_news_details.*
 import kotlinx.android.synthetic.main.layout_main_content.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -62,8 +64,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             toolbarTitle = bundle["TOOL_TITLE"] as String
             setToolBar(toolbarTitle)
             val frag = supportFragmentManager.getFragment(bundle, fragTag) as Fragment
-            supportFragmentManager.beginTransaction().replace(R.id.container, HomeFragment(), "Home")
+            supportFragmentManager.beginTransaction().replace(R.id.container, frag, fragTag)
                 .commit()
+        } else {
+            supportFragmentManager.beginTransaction().replace(R.id.container, HomeFragment(), "Home").commit()
         }
     }
 
@@ -174,10 +178,69 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun showNotifPeriodDialog() {
+        val checkedItem = getSharedPrefs().getInt("notif_period", 1)
+
+        val dialog = MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
+            .setTitle("Set Top Alerts Period")
+            .setSingleChoiceItems(arrayOf("2 hours", "4 hours", "8 hours", "Turn Off" ), checkedItem) {
+                dialog, which ->
+                when(which) {
+                    0 -> {
+                        handOffTopAlertTask(2)
+                        getSharedPrefs().edit().putInt("notif_period", 0).apply()
+                    }
+                    1 -> {
+
+                        handOffTopAlertTask(4)
+                        getSharedPrefs().edit().putInt("notif_period", 1).apply()
+                    }
+                    2 -> {
+
+                        handOffTopAlertTask(8)
+                        getSharedPrefs().edit().putInt("notif_period", 2).apply()
+                    }
+                    3 -> {
+
+                        turnOffTopAlerts()
+                        getSharedPrefs().edit().putInt("notif_period", 3).apply()
+                    }
+                }
+                launch {
+                    delay(750)
+                    dialog.dismiss()
+                }
+            }.create()
+        dialog.show()
+    }
+
+    private fun handOffTopAlertTask(hour: Long){
+
+
+        val wm = WorkManager.getInstance(applicationContext)
+        wm.cancelAllWorkByTag(topAlertWorking)
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest = PeriodicWorkRequestBuilder<TopNewsFetchWorker>(hour, TimeUnit.HOURS)
+            .setConstraints(constraints)
+            .addTag(topAlertWorking)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, 15, TimeUnit.MINUTES)
+            .setInitialDelay(30, TimeUnit.MINUTES)
+            .build()
+
+        wm.enqueue(workRequest)
 
     }
 
-    private fun handOffTopAlertTask(hour: Long){}
+    private fun turnOffTopAlerts(){
+        val wm = WorkManager.getInstance(applicationContext)
+        wm.cancelAllWorkByTag(topAlertWorking)
+    }
 
-    private fun turnOffTopAlerts(){}
+    override fun onDestroy() {
+        coroutineContext.cancelChildren()
+        super.onDestroy()
+    }
 }

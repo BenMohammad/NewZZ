@@ -101,7 +101,7 @@ class HomeFragment: Fragment(), CoroutineScope {
             setTopDrawable(drawable)
         }
         dashContainer.isRefreshing = false
-        retrySnack?.setText("Error occured")?.show()
+        retrySnack?.setText("Error occurred")?.show()
     }
 
     private fun showStoryContainer() {
